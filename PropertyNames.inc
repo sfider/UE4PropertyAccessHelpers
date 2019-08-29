@@ -3,6 +3,7 @@
 PNAME_ENTRY(AttenuationRadius);
 PNAME_ENTRY(SourceLength);
 PNAME_ENTRY(Intensity);
+PNAME_ENTRY(LightColor);
 PNAME_ENTRY(InnerConeAngle);
 PNAME_ENTRY(OuterConeAngle);
 PNAME_ENTRY(LightFalloffExponent);

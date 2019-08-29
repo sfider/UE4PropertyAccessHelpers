@@ -24,6 +24,23 @@ template<> struct TPropertyMapper<bool> { typedef UBoolProperty PropertyType; };
 template<> struct TPropertyMapper<FString> { typedef UStrProperty PropertyType; };
 template<> struct TPropertyMapper<FName> { typedef UNameProperty PropertyType; };
 
+template<> struct TPropertyMapper<FVector> { typedef UStructProperty PropertyType; };
+template<> struct TPropertyMapper<FVector4> { typedef UStructProperty PropertyType; };
+template<> struct TPropertyMapper<FVector2D> { typedef UStructProperty PropertyType; };
+template<> struct TPropertyMapper<FVector2DHalf> { typedef UStructProperty PropertyType; };
+
+template<> struct TPropertyMapper<FQuat> { typedef UStructProperty PropertyType; };
+template<> struct TPropertyMapper<FRotator> { typedef UStructProperty PropertyType; };
+
+template<> struct TPropertyMapper<FTransform> { typedef UStructProperty PropertyType; };
+template<> struct TPropertyMapper<FMatrix> { typedef UStructProperty PropertyType; };
+
+template<> struct TPropertyMapper<FIntPoint> { typedef UStructProperty PropertyType; };
+template<> struct TPropertyMapper<FIntVector> { typedef UStructProperty PropertyType; };
+
+template<> struct TPropertyMapper<FColor> { typedef UStructProperty PropertyType; };
+template<> struct TPropertyMapper<FLinearColor> { typedef UStructProperty PropertyType; };
+
 template<> struct TPropertyMapper<UObject*> { typedef UObjectProperty PropertyType; };
 template<> struct TPropertyMapper<FWeakObjectPtr> { typedef UWeakObjectProperty PropertyType; };
 template<> struct TPropertyMapper<FLazyObjectPtr> { typedef ULazyObjectProperty PropertyType; };
@@ -47,25 +64,25 @@ typename TPropertyMapper<Type>::PropertyType* GetProperty()
 template<typename Type, const TCHAR* PropertyName, typename ContainerType>
 Type* GetPropertyValuePtr(ContainerType* Container)
 {
-    return GetProperty<Type, PropertyName, ContainerType>()->GetPropertyValuePtr_InContainer(Container);
+    return GetProperty<Type, PropertyName, ContainerType>()->template ContainerPtrToValuePtr<Type>(Container, 0);
 }
 
 template<typename Type, const TCHAR* PropertyName, typename ContainerType>
 const Type* GetPropertyValuePtr(const ContainerType* Container)
 {
-    return GetProperty<Type, PropertyName, ContainerType>()->GetPropertyValuePtr_InContainer(Container);
+    return GetProperty<Type, PropertyName, ContainerType>()->template ContainerPtrToValuePtr<Type>(Container, 0);
 }
 
 template<typename Type, const TCHAR* PropertyName, typename ContainerType>
 Type GetPropertyValue(const ContainerType* Container)
 {
-    return GetProperty<Type, PropertyName, ContainerType>()->GetPropertyValue_InContainer(Container);
+    return *GetProperty<Type, PropertyName, ContainerType>()->template ContainerPtrToValuePtr<Type>(Container, 0);
 }
 
 template<typename Type, const TCHAR* PropertyName, typename ContainerType>
 void SetPropertyValue(ContainerType* Container, const Type& Value)
 {
-    GetProperty<Type, PropertyName, ContainerType>()->SetPropertyValue_InContainer(Container, Value);
+    *GetProperty<Type, PropertyName, ContainerType>()->template ContainerPtrToValuePtr<Type>(Container, 0) = Value;
 }
 
 } // namespace PropertyAccessHelpers
